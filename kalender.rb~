@@ -25,10 +25,10 @@ configure :development do
   set :base_url, ''
 end
 
-#set base_url for heroku proxy
-#configure :production do
-#  set :base_url, 'kalender.nerdlabor.de'
-#end
+set base_url for heroku proxy
+configure :production do
+  set :base_url, 'htwkcal.herokuapp.com'
+end
 
 # these helper methods are available in each erb view
 helpers do

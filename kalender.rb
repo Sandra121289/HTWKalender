@@ -25,7 +25,7 @@ configure :development do
   set :base_url, ''
 end
 
-set base_url for heroku proxy
+#set base_url for heroku proxy
 configure :production do
   set :base_url, 'htwkcal.herokuapp.com'
 end
