@@ -133,10 +133,9 @@ end
 #returns a String which is the downloadlink
 def make_downloadlink(link,wanted,venue)
   begin
-    #FIXME get_port doesnt work
     #old: "http://" + request.host + get_port + "/file/" + link + "/" + bool_to_str(venue) + "/" + wanted.join("/") + "/" +@@link.sub("/","_") +".ics"
 		options.base_url = request.host if options.base_url == ''
-    "http://" + options.base_url + "/file/" + link + "/" + bool_to_str(venue) + "/" + wanted.join("/") + "/" + link.sub("/","_") +".ics"
+    "http://" + options.base_url + get_port + "/file/" + link + "/" + bool_to_str(venue) + "/" + wanted.join("/") + "/" + link.sub("/","_") +".ics"
   rescue Exception => e
     @e = throw_error session['error'] = e.to_s + "<br />(Es ist ein Fehler aufgetreten. Bitte sende mir die Fehlermeldung per Mail.)"
     erb :error
@@ -148,7 +147,7 @@ def make_permalink(wanted,venue)
   #FIXME get_port doesnt work
   #old: "http://" + request.host + get_port + request.path_info + "/" + bool_to_str(venue) + "/" + wanted.join("/")
 	options.base_url = request.host if options.base_url == ''
-  "http://" + options.base_url + request.path_info + "/" + bool_to_str(venue) + "/" + wanted.join("/")
+  "http://" + options.base_url + get_port + request.path_info + "/" + bool_to_str(venue) + "/" + wanted.join("/")
 end
 
 #deletes all unwanted events and returns an Array
@@ -434,10 +433,8 @@ end
 def get_week(week)
   #check how much cweeks the current year has
   year = @@htwk["semester"].scan /\d+/
-  cweek_count = Date.civil(year[0].to_i,12,31).cweek
-
+  cweek_count = Date.civil(year[0].to_i,12,28).cweek
   week = week.to_i
-
   if week > cweek_count and cweek_count != 1 then
     week -= cweek_count
   end
@@ -448,8 +445,9 @@ end
 def get_port
   current_port = Sinatra::Application.port.to_s
   if current_port != "80"
-    ":"+ current_port
+   current_port = ":"+ current_port
   else
-    ""
+   current_port = ""
   end
+  current_port
 end
