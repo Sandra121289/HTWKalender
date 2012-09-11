@@ -136,7 +136,7 @@ def make_downloadlink(link,wanted,venue)
   begin
     #old: "http://" + request.host + get_port + "/file/" + link + "/" + bool_to_str(venue) + "/" + wanted.join("/") + "/" +@@link.sub("/","_") +".ics"
 		options.base_url = request.host if options.base_url == ''
-    "http://" + options.base_url + get_port + "/file/" + link + "/" + bool_to_str(venue) + "/" + wanted.join("/") + "/" + link.sub("/","_") +".ics"
+    "http://" + options.base_url + "/file/" + link + "/" + bool_to_str(venue) + "/" + wanted.join("/") + "/" + link.sub("/","_") +".ics"
   rescue Exception => e
     @e = throw_error session['error'] = e.to_s + "<br />(Es ist ein Fehler aufgetreten. Bitte sende mir die Fehlermeldung per Mail.)"
     erb :error
@@ -148,7 +148,7 @@ def make_permalink(wanted,venue)
   #FIXME get_port doesnt work
   #old: "http://" + request.host + get_port + request.path_info + "/" + bool_to_str(venue) + "/" + wanted.join("/")
 	options.base_url = request.host if options.base_url == ''
-  "http://" + options.base_url + get_port + request.path_info + "/" + bool_to_str(venue) + "/" + wanted.join("/")
+  "http://" + options.base_url + request.path_info + "/" + bool_to_str(venue) + "/" + wanted.join("/")
 end
 
 #deletes all unwanted events and returns an Array
@@ -443,6 +443,7 @@ def get_week(week)
 end
 
 # returns port of sinatra application
+# heroku funktioniert mit port momentan nicht
 def get_port
   current_port = Sinatra::Application.port.to_s
   if current_port != "80"
