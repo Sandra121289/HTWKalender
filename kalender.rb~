@@ -9,7 +9,7 @@ require 'kconv'
 require 'open-uri'
 require 'net/http'
 require 'rexml/document'
-require "jcode"
+require 'jcode' if RUBY_VERSION < '1.9'
 require 'newrelic_rpm'
 require 'digest/sha1'
 
