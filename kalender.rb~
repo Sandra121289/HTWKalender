@@ -1,4 +1,5 @@
 # encoding: utf-8
+
 require 'rubygems'
 require 'bundler'
 Bundler.require(:default)
@@ -136,7 +137,7 @@ def make_downloadlink(link,wanted,venue)
   begin
     #old: "http://" + request.host + get_port + "/file/" + link + "/" + bool_to_str(venue) + "/" + wanted.join("/") + "/" +@@link.sub("/","_") +".ics"
 		options.base_url = request.host if options.base_url == ''
-    "http://" + options.base_url + get_port + "/file/" + link + "/" + bool_to_str(venue) + "/" + wanted.join("/") + "/" + link.sub("/","_") +".ics"
+    "http://" + options.base_url + "/file/" + link + "/" + bool_to_str(venue) + "/" + wanted.join("/") + "/" + link.sub("/","_") +".ics"
   rescue Exception => e
     @e = throw_error session['error'] = e.to_s + "<br />(Es ist ein Fehler aufgetreten. Bitte sende mir die Fehlermeldung per Mail.)"
     erb :error
@@ -195,7 +196,8 @@ end
 #returns a String in iCal Format
 def make_cal(events,link,venue)
   cal = Calendar.new
-
+  headers['Content-Type'] = "text/calendar; charset=UTF-8"
+  cal.version = "2.0"
   cal.product_id = "-//kalender.nerdlabor.org//NERDCAL 2.0//DE"
   cal.custom_property("X-WR-CALNAME", "#{link.sub("-","")}")
   cal.custom_property("X-WR-CALDESC", "#{link.sub("-","")}")
@@ -225,7 +227,7 @@ def make_cal(events,link,venue)
   events.each do |event|
     event[1].each do |week|
       cal.event do
-        uid         "#{Digest::SHA1.hexdigest event.to_s}@kalender.nerdlabor.de"
+#        uid         "#{Digest::SHA1.hexdigest this.to_s}@kalender.nerdlabor.de"
         dtstart     DateTime.commercial(get_year(week), get_week(week), event[0]+1, event[2][0], event[2][1], 0) #to calculate the Time with DateTime.commercial, we need the actual Year
         dtend       DateTime.commercial(get_year(week), get_week(week), event[0]+1, event[3][0], event[3][1], 0) #the weeknums differ from the real calenderweeknums, we fix this with the get_year and get_week function
         location    event[4]
@@ -416,7 +418,7 @@ end
 def get_year(week)
   begin
     year = @@htwk["semester"].scan /\d+/
-    cweek_count = Date.civil(year[0].to_i,12,31).cweek
+    cweek_count = Date.civil(year[0].to_i,12,28).cweek
     if week.to_i <= cweek_count or cweek_count == 1 then
       year[0].to_i
     else
