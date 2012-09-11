@@ -196,7 +196,7 @@ end
 #returns a String in iCal Format
 def make_cal(events,link,venue)
   cal = Calendar.new
-  headers['Content-Type'] = "text/calendar; charset=UTF-8"
+#  headers['Content-Type'] = "text/calendar; charset=UTF-8"
   cal.version = "2.0"
   cal.product_id = "-//kalender.nerdlabor.org//NERDCAL 2.0//DE"
   cal.custom_property("X-WR-CALNAME", "#{link.sub("-","")}")
